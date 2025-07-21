@@ -5,10 +5,12 @@ import random
 def detect_lines(img, threshold1=50, threshold2=150, aperture_size=3, minLineLength=100, maxLineGap=10):
     grayscale_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(grayscale_img, threshold1, threshold2)
+
     lines = cv2.HoughLinesP(
         edges,
-        aperture_size,
-        np.pi/180,
+        rho=aperture_size,
+        theta=np.pi/180,
+        threshold=50,
         minLineLength=minLineLength,
         maxLineGap=maxLineGap
     )
@@ -16,6 +18,9 @@ def detect_lines(img, threshold1=50, threshold2=150, aperture_size=3, minLineLen
     return lines
 
 def draw_lines(img, lines, color=(0, 255, 0)):
+    if lines is None:
+        return img
+
     for line in lines:
         x1, y1, x2, y2 = line[0]
         cv2.line(img, (x1, y1), (x2, y2), color, 2)
@@ -49,6 +54,9 @@ def detect_lanes(lines):
     return lanes
 
 def draw_lanes(img, lanes):
+    if lanes is None:
+        return img
+
     for lane in lanes:
         color = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
 
