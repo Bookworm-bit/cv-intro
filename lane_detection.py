@@ -4,13 +4,13 @@ import random
 
 def detect_lines(img, threshold1=50, threshold2=150, aperture_size=3, minLineLength=100, maxLineGap=10):
     grayscale_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(grayscale_img, threshold1, threshold2)
+    edges = cv2.Canny(grayscale_img, threshold1, threshold2, apertureSize=aperture_size)
 
     lines = cv2.HoughLinesP(
         edges,
         rho=aperture_size,
         theta=np.pi/180,
-        threshold=50,
+        threshold=100,
         minLineLength=minLineLength,
         maxLineGap=maxLineGap
     )
@@ -47,9 +47,17 @@ def detect_lanes(lines):
 
     slopes, intercepts = get_slopes_intercepts(lines)
 
-    for i in range(len(lines) - 1):
-        if slopes[i] == slopes[i+1]:
-            lanes.append([lines[i], lines[i+1]])
+    for i in range(len(lines)):
+        for j in range(i, len(lines)):
+            angle1 = np.arctan(slopes[i])
+            angle2 = np.arctan(slopes[j])
+
+            ang_sim = abs(angle1 - angle2) <= 10
+            int_sim = abs(intercepts[i] - intercepts[j]) <= 1000
+
+            if ang_sim and int_sim:
+                lanes.append([lines[i], lines[j]])
+                break
 
     return lanes
 
@@ -60,10 +68,10 @@ def draw_lanes(img, lanes):
     for lane in lanes:
         color = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
 
-        x1, y1, x2, y2 = lanes[0][0]
+        x1, y1, x2, y2 = lane[0][0]
         cv2.line(img, (x1, y1), (x2, y2), color, 2)
 
-        x1, y1, x2, y2 = lanes[1][0]
+        x1, y1, x2, y2 = lane[1][0]
         cv2.line(img, (x1, y1), (x2, y2), color, 2)
     
     return img
