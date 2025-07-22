@@ -49,7 +49,6 @@ def get_slopes_intercepts(lines):
         slopes.append((y2 - y1) / (x2 - x1))
 
         intercepts.append((IMAGE_HEIGHT - y1) / slopes[-1] + x1)
-        # print(line)
 
     return (slopes, intercepts)
 
@@ -57,10 +56,6 @@ def detect_lanes(lines):
     lanes = []
 
     slopes, intercepts = get_slopes_intercepts(lines)
-
-    # print(slopes)
-    # print(intercepts)
-    # print(angles)
     
     filtered_lines = set()
     seen = [False] * len(lines)
@@ -80,12 +75,7 @@ def detect_lanes(lines):
         
         filtered_lines.add(i)
 
-    print(filtered_lines)
-
     filtered_lines = list(filtered_lines)
-
-    for f in filtered_lines:
-        print(slopes[f], intercepts[f], np.arctan(slopes[f]))
     
     for i in range(len(filtered_lines)):
         for j in range(i+1, len(filtered_lines)):
