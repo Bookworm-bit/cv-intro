@@ -6,6 +6,12 @@ IMAGE_HEIGHT = 2138
 IMAGE_WIDTH = 3824
 
 def detect_lines(img, threshold1=50, threshold2=150, aperture_size=3, minLineLength=100, maxLineGap=10):
+    global IMAGE_HEIGHT
+    global IMAGE_WIDTH
+
+    IMAGE_HEIGHT = img.shape[0]
+    IMAGE_WIDTH = img.shape[1]
+    
     grayscale_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(grayscale_img, threshold1, threshold2, apertureSize=aperture_size)
 

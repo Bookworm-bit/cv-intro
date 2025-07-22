@@ -1,10 +1,7 @@
-from lane_detection import detect_lines, draw_lines, get_slopes_intercepts, detect_lanes, draw_lanes
+from lane_detection import detect_lines, draw_lines, get_slopes_intercepts, detect_lanes, draw_lanes, IMAGE_WIDTH, IMAGE_HEIGHT
 
 import cv2
 import numpy as np
-
-IMAGE_HEIGHT = 2138
-IMAGE_WIDTH = 3824
 
 def get_lane_center(lanes):
     center_intercept = 0
