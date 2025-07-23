@@ -91,7 +91,7 @@ def detect_lanes(lines):
             ang_sim = abs((angle1 - angle2 + 360) % 360) <= 0.5
             int_sim = abs(intercepts[filtered_lines[i]] - intercepts[filtered_lines[j]]) <= 500
 
-            if ang_sim or int_sim:
+            if int_sim:
                 lanes.append([lines[filtered_lines[i]], lines[filtered_lines[j]]])
 
     return lanes
@@ -101,9 +101,9 @@ def draw_lanes(img, lanes):
         color = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
 
         x1, y1, x2, y2 = lane[0][0]
-        cv2.line(img, (x1, y1), (x2, y2), color, 2)
+        cv2.line(img, (x1, y1), (x2, y2), color, 20)
 
         x1, y1, x2, y2 = lane[1][0]
-        cv2.line(img, (x1, y1), (x2, y2), color, 2)
+        cv2.line(img, (x1, y1), (x2, y2), color, 20)
     
     return img
