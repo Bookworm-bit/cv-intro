@@ -30,9 +30,22 @@ def recommend_direction(center, slope):
     Ret
     - Direction to move to, left, right, forward
     """
+
+    translate_direction = ""
     if center < IMAGE_WIDTH / 2 - 50:
-        return "left"
+        translate_direction = "left"
     elif center > IMAGE_WIDTH / 2 + 50:
-        return "right"
+        translate_direction = "right"
     else:
-        return "forward"
+        translate_direction = "forward"
+    
+    rotate_direction = ""
+    angle = np.arctan(slope)
+    if angle < np.pi - 0.05:
+        rotate_direction = "left"
+    elif angle > np.pi + 0.05:
+        rotate_direction = "right"
+    else:
+        rotate_direction = "none"
+
+    return (translate_direction, rotate_direction)
