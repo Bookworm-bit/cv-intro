@@ -42,9 +42,9 @@ def recommend_direction(center, slope):
     rotate_direction = ""
     angle = np.arctan(slope)
     if angle < np.pi - 0.1:
-        rotate_direction = "left"
-    elif angle > np.pi + 0.1:
         rotate_direction = "right"
+    elif angle > np.pi + 0.1:
+        rotate_direction = "left"
     else:
         rotate_direction = "none"
 

@@ -74,7 +74,7 @@ def detect_lanes(lines):
                 continue
 
             int_sim = abs(intercepts[i] - intercepts[j]) <= 50
-            ang_sim = abs((np.arctan(slopes[i]) - np.arctan(slopes[j]) + 2 * np.pi) % (2 * np.pi) - 2 * np.pi) <= 0.1
+            ang_sim = abs(np.arctan(slopes[i]) - np.arctan(slopes[j])) <= 0.05
 
             if int_sim or ang_sim:
                 seen[j] = True
@@ -82,18 +82,22 @@ def detect_lanes(lines):
         filtered_lines.add(i)
 
     filtered_lines = list(filtered_lines)
-    
+
+    # x = [lines[fl] for fl in filtered_lines]
+    # print(x)
+    # print([intercepts[fl] for fl in filtered_lines])
+    # print([np.arctan(slopes[fl]) for fl in filtered_lines])
+
     for i in range(len(filtered_lines)):
         for j in range(i+1, len(filtered_lines)):
-            angle1 = np.arctan(filtered_lines[i])
-            angle2 = np.arctan(filtered_lines[j])
+            angle1 = np.arctan(slopes[filtered_lines[i]])
+            angle2 = np.arctan(slopes[filtered_lines[j]])
 
-            ang_sim = abs((angle1 - angle2 + 360) % 360) <= 0.5
-            int_sim = abs(intercepts[filtered_lines[i]] - intercepts[filtered_lines[j]]) <= 500
+            ang_sim = abs(angle1 - angle2) <= 0.4
 
-            if int_sim:
+            if ang_sim:
                 lanes.append([lines[filtered_lines[i]], lines[filtered_lines[j]]])
-
+                
     return lanes
 
 def draw_lanes(img, lanes):
