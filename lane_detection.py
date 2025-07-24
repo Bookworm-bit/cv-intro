@@ -5,13 +5,16 @@ import random
 IMAGE_HEIGHT = 2138
 IMAGE_WIDTH = 3824
 
-def detect_lines(img, threshold1=50, threshold2=150, aperture_size=3, minLineLength=100, maxLineGap=10):
+def crop_half(img):
     global IMAGE_HEIGHT
     global IMAGE_WIDTH
 
     IMAGE_HEIGHT = img.shape[0]
     IMAGE_WIDTH = img.shape[1]
-    
+
+    return img[IMAGE_HEIGHT//2:, :]
+
+def detect_lines(img, threshold1=50, threshold2=150, aperture_size=3, minLineLength=100, maxLineGap=10):
     grayscale_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(grayscale_img, threshold1, threshold2, apertureSize=aperture_size)
 
@@ -54,7 +57,7 @@ def get_slopes_intercepts(lines):
 
         slopes.append((y2 - y1) / (x2 - x1))
 
-        intercepts.append((IMAGE_HEIGHT - y1) / slopes[-1] + x1)
+        intercepts.append(-y1 / slopes[-1] + x1)
 
     return (slopes, intercepts)
 
